@@ -20,7 +20,7 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="lg:px-5 px-3 w-full overflow-hidden">
+    <div className="lg:px-5 px-3 w-full">
       <Header />
       {/* Main Content */}
       <main className="flex-grow no-scrollbar">{children}</main>
