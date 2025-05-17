@@ -1,4 +1,4 @@
-import { AnimationControls, TargetAndTransition } from "framer-motion";
+import { AnimationControls } from "framer-motion";
 
 // Calculate positions of elements in an orbit
 export const calculateOrbitPositions = (

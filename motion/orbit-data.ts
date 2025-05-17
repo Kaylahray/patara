@@ -1,4 +1,3 @@
-// Define avatar data for the orbit
 export const avatarData = [
   { label: "P", image: "/circles/1.svg", angle: 270 },
   { label: "M", image: "/circles/2.svg", angle: 315 },

@@ -54,13 +54,20 @@ function EarningsTableDropdown({
   count: number;
   setCount: (count: number) => void;
 }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
       <DropdownMenuTrigger className="bg-background-secondary hover:bg-background-secondary/80 border-primary flex h-10 cursor-pointer items-center gap-1 rounded-lg border p-2">
         <span className="text-primary font-geist text-sm font-semibold">
           {count} <span className="hidden md:inline"> Transaction</span>
         </span>
-        <ChevronDown className="text-secondary size-5" />
+        <ChevronDown
+          className={cn(
+            "text-secondary size-5 transition-transform duration-200 ease-in-out",
+            dropdownOpen ? "rotate-180" : ""
+          )}
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-secondary border-primary border shadow-md min-w-[140px]">
         {[10, 20, 30, 40, 50].map((value) => (

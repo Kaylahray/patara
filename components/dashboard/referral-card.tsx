@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import OrbitAvatars from "../orbit-avatars";
+import { toast } from "sonner";
 
 export default function ReferralCard() {
   const [referralLink] = useState("0x0e0Fceb520F76f3eAC0Aa764De4B97C53Eb36658");
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
-    alert("Link copied to clipboard!");
+    toast.success("Link copied to clipboard!");
   };
 
   const shareLink = () => {
@@ -44,7 +45,7 @@ export default function ReferralCard() {
           </p>
 
           <div className="md:mt-19 mt-10">
-            <div className="flex flex-col w-full p-6 pl-4 pr-6 rounded-xl bg-secondary">
+            <div className="flex flex-col w-full p-6 pl-4 pr-4 lg:pr-6 rounded-xl bg-secondary">
               <p className="font-geist text-[14px] font-normal leading-[18px] text-secondary">
                 Your Referral Link
               </p>

@@ -2,11 +2,11 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import Layout from "@/components/Layout";
 import ReferralCard from "@/components/dashboard/referral-card";
 import StatsCards from "@/components/dashboard/stats-cards";
 import EarningsTable from "@/components/dashboard/earnings-table";
 import { useAuth } from "@/context/AuthContext";
+import Layout from "@/Layout/layout";
 export default function Dashboard() {
   const { isLoggedIn, isLoading } = useAuth();
   const router = useRouter();
@@ -21,17 +21,14 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="grid grid-cols-1 w-full lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 no-scrollbar overflow-auto">
-        {/* Refer and Earn Section - 3 columns */}
         <div className="lg:col-span-3 col-span-1  h-full w-full">
           <ReferralCard />
         </div>
 
-        {/* Stats Section - 1 column */}
         <div className="xl:col-span-1 col-span-3 h-full">
           <StatsCards />
         </div>
       </div>
-      {/* Earnings Table - Full width */}
       <div className="mt-4">
         <EarningsTable />
       </div>

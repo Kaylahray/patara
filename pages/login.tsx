@@ -1,43 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import BackgroundLetters from "@/components/background-letters";
 import { Button } from "@/components/ui/button";
-import Layout from "@/components/Layout";
+import Layout from "@/Layout/layout";
 import { useAuth } from "@/context/AuthContext";
 import OrbitAvatars from "@/components/orbit-avatars";
 
 export default function Login() {
-  const { login, isLoggedIn, isLoading } = useAuth();
+  const { handleLogin, isLoggedIn, isLoading, isConnecting } = useAuth();
   const router = useRouter();
-  const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
-    // Only redirect if fully logged in and not in the process of connecting
     if (!isLoading && isLoggedIn && !isConnecting) {
-      // Add a small delay to ensure smooth transition
-      setTimeout(() => {
-        router.replace("/");
-      }, 300);
+      router.replace("/");
     }
   }, [isLoggedIn, isLoading, router, isConnecting]);
 
-  const handleLogin = () => {
-    setIsConnecting(true);
-    login();
-
-    // Add a delay to ensure the login state is fully processed before redirecting
-    setTimeout(() => {
-      router.push("/");
-      // Keep connecting state for a bit after navigation to prevent flashes
-      setTimeout(() => {
-        setIsConnecting(false);
-      }, 500);
-    }, 1500);
-  };
-
-  // Show loading spinner while connecting
   if (isConnecting) {
     return (
       <div className="min-h-screen bg-default flex items-center justify-center">
@@ -49,7 +29,6 @@ export default function Login() {
   return (
     <Layout>
       <div className="relative min-h-[calc(100vh-120px)] overflow-hidden max-w-screen-xl mx-auto">
-        {/* Blurred Background */}
         <div className="absolute inset-0 z-0 blur-[4px]">
           <BackgroundLetters />
         </div>

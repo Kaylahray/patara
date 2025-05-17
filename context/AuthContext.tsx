@@ -5,11 +5,14 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { useRouter } from "next/router";
 
 interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
+  isConnecting: boolean;
   login: () => void;
+  handleLogin: () => void;
   logout: () => void;
 }
 
@@ -18,9 +21,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    // Check localStorage for authentication status on initial load
     const authStatus = localStorage.getItem("isLoggedIn");
     if (authStatus === "true") {
       setIsLoggedIn(true);
@@ -28,9 +32,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = () => {
+  const login = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "true");
+    setIsLoading(false);
+  };
+
+  const handleLogin = async () => {
+    setIsConnecting(true);
+    await login();
+
+    router.push("/");
+    setTimeout(() => {
+      setIsConnecting(false);
+    }, 500);
   };
 
   const logout = () => {
@@ -39,7 +56,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        isLoading,
+        isConnecting,
+        login,
+        handleLogin,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

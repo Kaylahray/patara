@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { motion, useAnimationControls } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,9 +6,70 @@ import { avatarData } from "@/motion/orbit-data";
 import {
   calculateOrbitPositions,
   startOrbitAnimation,
-  startCounterRotationAnimation,
 } from "@/motion/orbit-animation";
 import OrbitBackground from "@/motion/orbit-background";
+
+// Define the type for individual avatar data items
+interface AvatarDataItem {
+  label: string;
+  image: string;
+  angle: number;
+}
+
+// Child component for a single orbiting avatar
+interface OrbitingAvatarItemProps {
+  item: AvatarDataItem;
+  initialPosition: { x: number; y: number };
+  avatarSize: number;
+  isLoaded: boolean;
+  orbitDuration?: number;
+}
+
+function OrbitingAvatarItem({
+  item,
+  initialPosition,
+  avatarSize,
+  isLoaded,
+  orbitDuration = 45,
+}: OrbitingAvatarItemProps) {
+  const itemControl = useAnimationControls();
+
+  useEffect(() => {
+    if (isLoaded) {
+      itemControl.start({
+        rotate: -360,
+        transition: {
+          duration: orbitDuration,
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop",
+        },
+      });
+    }
+  }, [isLoaded, itemControl, orbitDuration]);
+
+  return (
+    <motion.div
+      key={item.label}
+      className="absolute"
+      style={{
+        left: initialPosition.x,
+        top: initialPosition.y,
+        width: avatarSize,
+        height: avatarSize,
+        transformOrigin: "center",
+        opacity: isLoaded ? 1 : 0,
+      }}
+      animate={itemControl}
+      initial={{ rotate: 0 }}
+    >
+      <Avatar className="size-[3.25rem] select-none">
+        <AvatarImage src={item.image} alt={item.label} />
+        <AvatarFallback>{item.label}</AvatarFallback>
+      </Avatar>
+    </motion.div>
+  );
+}
 
 function OrbitAvatars() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,27 +78,19 @@ function OrbitAvatars() {
   const gap = 15;
   const radius = 135;
   const avatarSize = 52;
+  const orbitDuration = 45; // Consistent duration
 
-  // Animation controls for smooth animation
   const orbitControls = useAnimationControls();
-  const avatarControls = avatarData.map(() => useAnimationControls());
 
-  // Start animations only after component fully mounts and images load
   useEffect(() => {
     setIsLoaded(true);
+    startOrbitAnimation(orbitControls, orbitDuration);
+  }, [orbitControls, orbitDuration]);
 
-    // Initialize animations using functions from motion utilities
-    startOrbitAnimation(orbitControls);
-    startCounterRotationAnimation(avatarControls);
-  }, []);
-
-  // Pre-calculate avatar positions using the utility function
-  const avatarPositions = calculateOrbitPositions(
-    avatarData,
-    center,
-    center,
-    radius,
-    avatarSize
+  const avatarPositions = useMemo(
+    () =>
+      calculateOrbitPositions(avatarData, center, center, radius, avatarSize),
+    [center, radius, avatarSize]
   );
 
   return (
@@ -55,8 +108,8 @@ function OrbitAvatars() {
         <div
           className="bg-background-default/5 flex rounded-full absolute"
           style={{
-            width: 130, // 8.125rem
-            height: 130, // 8.125rem
+            width: 130,
+            height: 130,
             top: "calc(50% - 65px)",
             left: "calc(50% - 65px)",
           }}
@@ -87,25 +140,14 @@ function OrbitAvatars() {
             initial={{ rotate: 0 }}
           >
             {avatarData.map((item, index) => (
-              <motion.div
+              <OrbitingAvatarItem
                 key={item.label}
-                className="absolute"
-                style={{
-                  left: avatarPositions[index].x,
-                  top: avatarPositions[index].y,
-                  width: avatarSize,
-                  height: avatarSize,
-                  transformOrigin: "center",
-                  opacity: isLoaded ? 1 : 0, // Start visible only after loaded
-                }}
-                animate={avatarControls[index]}
-                initial={{ rotate: 0 }}
-              >
-                <Avatar className="size-[3.25rem] select-none">
-                  <AvatarImage src={item.image} alt={item.label} />
-                  <AvatarFallback>{item.label}</AvatarFallback>
-                </Avatar>
-              </motion.div>
+                item={item as AvatarDataItem}
+                initialPosition={avatarPositions[index]}
+                avatarSize={avatarSize}
+                isLoaded={isLoaded}
+                orbitDuration={orbitDuration}
+              />
             ))}
           </motion.div>
         </div>
