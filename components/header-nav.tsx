@@ -27,8 +27,7 @@ export function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const { handleLogin, isLoggedIn, isLoading, logout, isConnecting } =
-    useAuth();
+  const { login, isLoggedIn, isLoading, logout, isConnecting } = useAuth();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -156,7 +155,7 @@ export function Header() {
             ) : (
               <Button
                 variant="primary"
-                onClick={handleLogin}
+                onClick={login}
                 className="h-10"
                 disabled={isLoading}
               >

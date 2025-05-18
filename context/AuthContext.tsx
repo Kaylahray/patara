@@ -6,13 +6,13 @@ import {
   ReactNode,
 } from "react";
 import { useRouter } from "next/router";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
   isConnecting: boolean;
   login: () => void;
-  handleLogin: () => void;
   logout: () => void;
 }
 
@@ -20,40 +20,66 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
   const router = useRouter();
 
+  const { isLoading } = useQuery({
+    queryKey: ["authStatus"],
+    queryFn: () => {
+      const authStatus = localStorage.getItem("isLoggedIn");
+
+      setIsLoggedIn(authStatus === "true");
+
+      return authStatus;
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
   useEffect(() => {
-    const authStatus = localStorage.getItem("isLoggedIn");
-    if (authStatus === "true") {
-      setIsLoggedIn(true);
+    if (isLoading) return;
+
+    if (isLoggedIn && router.pathname === "/login") {
+      router.push("/");
     }
-    setIsLoading(false);
-  }, []);
 
-  const login = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true");
-    setIsLoading(false);
-  };
+    if (router.pathname !== "/login" && !isLoggedIn) {
+      router.push("/login");
+    }
+  }, [isLoggedIn, router.pathname, isLoading]);
 
-  const handleLogin = async () => {
-    setIsConnecting(true);
-    await login();
+  const { mutateAsync: loginAsync } = useMutation({
+    mutationFn: async () => {
+      setIsConnecting(true);
 
-    router.push("/");
-    setTimeout(() => {
-      setIsConnecting(false);
-    }, 500);
-  };
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  const logout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn");
-  };
+      setTimeout(() => {
+        setIsConnecting(false);
+      }, 500);
+
+      return true;
+    },
+    onSuccess: () => {
+      setIsLoggedIn(true);
+      localStorage.setItem("isLoggedIn", "true");
+      router.push("/");
+    },
+    onError: () => {
+      setIsLoggedIn(false);
+      localStorage.removeItem("isLoggedIn");
+      router.push("/login");
+    },
+  });
+
+  const { mutate: logout } = useMutation({
+    mutationFn: () => {
+      setIsLoggedIn(false);
+      localStorage.removeItem("isLoggedIn");
+      return Promise.resolve();
+    },
+  });
 
   return (
     <AuthContext.Provider
@@ -61,8 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoggedIn,
         isLoading,
         isConnecting,
-        login,
-        handleLogin,
+        login: loginAsync,
         logout,
       }}
     >
