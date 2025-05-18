@@ -16,7 +16,7 @@ export default function Login() {
     if (!isLoading && isLoggedIn && !isConnecting) {
       router.replace("/");
     }
-  }, [isLoggedIn, isLoading, router, isConnecting]);
+  }, [isLoggedIn, isLoading, isConnecting]);
 
   if (isConnecting) {
     return (
@@ -28,14 +28,14 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="relative min-h-[calc(100vh-120px)] overflow-hidden max-w-screen-xl mx-auto">
-        <div className="absolute inset-0 z-0 blur-[4px]">
+      <div className="relative min-h-[calc(100vh-120px)] overflow-auto max-w-screen-xl mx-auto">
+        <div className="absolute inset-0 z-0 md:blur-[4px]">
           <BackgroundLetters />
         </div>
 
         {/* Main Content */}
         <main className="relative flex justify-center z-10 items-center mt-8">
-          <div className="bg-primary border-default border rounded-3xl py-10 px-5 max-w-[464px] w-full mx-auto flex flex-col items-center">
+          <div className="bg-primary border-default border rounded-3xl  py-10 md:px-5 px-3 w-auto max-w-[464px] md:w-full mx-auto flex flex-col items-center">
             <div className="relative w-80 h-80 mb-8">
               <OrbitAvatars />
             </div>

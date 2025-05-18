@@ -10,7 +10,6 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { isLoading } = useAuth();
 
-  // Show loading spinner while authentication is being checked
   if (isLoading) {
     return (
       <div className="min-h-screen bg-default flex items-center justify-center">
@@ -20,10 +19,9 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="lg:px-5 px-3 w-full">
+    <div className="lg:px-5 px-3 w-full min-h-screen  h-full">
       <Header />
-      {/* Main Content */}
-      <main className="flex-grow no-scrollbar">{children}</main>
+      <main className="mt-25 overflow-auto">{children}</main>
       <Toaster richColors />
     </div>
   );

@@ -9,14 +9,12 @@ import {
 } from "@/motion/orbit-animation";
 import OrbitBackground from "@/motion/orbit-background";
 
-// Define the type for individual avatar data items
 interface AvatarDataItem {
   label: string;
   image: string;
   angle: number;
 }
 
-// Child component for a single orbiting avatar
 interface OrbitingAvatarItemProps {
   item: AvatarDataItem;
   initialPosition: { x: number; y: number };

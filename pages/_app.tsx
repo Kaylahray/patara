@@ -8,7 +8,6 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -17,10 +16,7 @@ const inter = Inter({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div
-      className={`${geistSans.variable}  ${inter.variable} font-geist min-h-screen bg-default text-primary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col`}
-      style={{
-        fontFamily: "var(--font-geist-sans)",
-      }}
+      className={`${geistSans.variable}  ${inter.variable} font-geist  bg-default text-primary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col`}
     >
       <AuthProvider>
         <Component {...pageProps} />

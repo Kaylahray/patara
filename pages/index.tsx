@@ -11,16 +11,15 @@ export default function Dashboard() {
   const { isLoggedIn, isLoading } = useAuth();
   const router = useRouter();
 
-  // Redirect to login if not logged in
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
       router.push("/login");
     }
-  }, [isLoggedIn, isLoading, router]);
+  }, [isLoggedIn, isLoading]);
 
   return (
     <Layout>
-      <div className="grid grid-cols-1 w-full lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 no-scrollbar overflow-auto">
+      <div className="grid grid-cols-1 w-full lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 ">
         <div className="lg:col-span-3 col-span-1  h-full w-full">
           <ReferralCard />
         </div>

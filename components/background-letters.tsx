@@ -11,18 +11,16 @@ const backgroundLetters = [
   { letter: "G", x: "5%", y: "82%" },
 ];
 
-export default function BackgroundLetters() {
+function BackgroundLetters() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 z-0 ">
       {backgroundLetters.map((item, index) => (
         <div
           key={index}
-          className="absolute flex w-15 h-15 items-center justify-center rounded-full text-3xl font-bold text-[#C4C4C8]"
+          className="absolute flex w-15 h-15 items-center justify-center rounded-full bg-[linear-gradient(to_bottom,#282832,#212121,#121212)] text-3xl font-bold text-[#C4C4C8] blur-[0.21875rem]"
           style={{
             top: item.y,
             left: item.x,
-            background:
-              "linear-gradient(180deg, #282832 0%, #212121 36.52%, #121212 100%)",
           }}
         >
           {item.letter}
@@ -31,3 +29,5 @@ export default function BackgroundLetters() {
     </div>
   );
 }
+
+export default BackgroundLetters;

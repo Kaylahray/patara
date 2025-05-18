@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, Search, User, LogOut } from "lucide-react";
 import { NotificationBellIcon, SettingsIcon } from "@/components/ui/icons/icon";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "next/router";
 import {
   CommandDialog,
   CommandEmpty,
@@ -26,16 +25,10 @@ import {
 export function Header() {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { handleLogin, isLoggedIn, isLoading, logout, isConnecting } =
     useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && isLoggedIn && !isConnecting) {
-      router.replace("/");
-    }
-  }, [isLoggedIn, isLoading, router, isConnecting]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -49,6 +42,19 @@ export function Header() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   if (isConnecting) {
     return (
       <div className="min-h-screen bg-default flex items-center justify-center">
@@ -59,8 +65,18 @@ export function Header() {
 
   return (
     <>
-      <header className="bg-default flex  items-center gap-10 justify-between p-2 mb-5 md:p-5">
-        <div className="flex items-center gap-4 lg:min-w-[16rem]">
+      <header
+        className={`
+          z-50 flex fixed inset-x-0 top-0 items-center gap-10 justify-between p-2 mb-5 md:p-5
+          transition-colors duration-300 ease-in-out
+          ${
+            isScrolled
+              ? "bg-default/80 backdrop-blur-md shadow-lg"
+              : "bg-default"
+          }
+        `}
+      >
+        <div className="flex items-center gap-2 lg:gap-4 ">
           <Button
             variant="ghost"
             size="icon"
@@ -68,7 +84,9 @@ export function Header() {
           >
             <Menu className="h-6 w-6 text-primary" />
           </Button>
-          <Image src="/patara-logo.svg" alt="logo" width={134} height={36} />
+          <div className="md:w-fit md:h-fit w-30 ">
+            <Image src="/patara-logo.svg" alt="logo" width={134} height={36} />
+          </div>
         </div>
 
         <div className="relative hidden lg:flex lg:flex-1">
@@ -88,12 +106,16 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <IconButton className="flex bg-background-secondary hover:bg-background-secondary/80 size-8 sm:size-10">
-            <NotificationBellIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
-          </IconButton>
-          <IconButton className="flex bg-background-secondary hover:bg-background-secondary/80 size-8 sm:size-10">
-            <SettingsIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
-          </IconButton>
+          {isLoggedIn && (
+            <>
+              <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
+                <NotificationBellIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
+              </IconButton>
+              <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
+                <SettingsIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
+              </IconButton>
+            </>
+          )}
 
           <div className="flex justify-end">
             {isLoggedIn ? (
