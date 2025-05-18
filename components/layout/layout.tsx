@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { useAuth } from "../context/AuthContext";
-import Header from "../components/header-nav";
+import { useAuth } from "../../context/AuthContext";
+import Header from "../header-nav";
 import { Toaster } from "sonner";
 
 interface LayoutProps {

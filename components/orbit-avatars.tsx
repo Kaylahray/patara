@@ -2,12 +2,12 @@ import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { motion, useAnimationControls } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { avatarData } from "@/motion/orbit-data";
+import { avatarData } from "@/components/motion/orbit-data";
 import {
   calculateOrbitPositions,
   startOrbitAnimation,
-} from "@/motion/orbit-animation";
-import OrbitBackground from "@/motion/orbit-background";
+} from "@/components/motion/orbit-animation";
+import OrbitBackground from "@/components/motion/orbit-background";
 
 interface AvatarDataItem {
   label: string;
