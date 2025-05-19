@@ -2,15 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  Menu,
-  Search,
-  User,
-  LogOut,
-  Bell,
-  Settings,
-} from "lucide-react";
+import { ChevronDown, Menu, Search, User, LogOut } from "lucide-react";
 import { NotificationBellIcon, SettingsIcon } from "@/components/ui/icons/icon";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -33,9 +25,8 @@ import {
 export function Header() {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const { login, isLoggedIn, isLoading, logout, isConnecting } = useAuth();
+  const { login, isLoggedIn, logout, isConnecting } = useAuth();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -47,19 +38,6 @@ export function Header() {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   if (isConnecting) {
