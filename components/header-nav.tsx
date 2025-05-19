@@ -2,7 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Menu, Search, User, LogOut } from "lucide-react";
+import {
+  ChevronDown,
+  Menu,
+  Search,
+  User,
+  LogOut,
+  Bell,
+  Settings,
+} from "lucide-react";
 import { NotificationBellIcon, SettingsIcon } from "@/components/ui/icons/icon";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -64,17 +72,7 @@ export function Header() {
 
   return (
     <>
-      <header
-        className={`
-          z-50 flex fixed inset-x-0 top-0 items-center gap-10 justify-between p-2 mb-5 md:p-5
-          transition-colors duration-300 ease-in-out
-          ${
-            isScrolled
-              ? "bg-default/80 backdrop-blur-md shadow-lg"
-              : "bg-default"
-          }
-        `}
-      >
+      <header className="bg-default flex  items-center  p-2 mb-5 md:p-5">
         <div className="flex items-center gap-2 lg:gap-4 ">
           <Button
             variant="ghost"
@@ -83,85 +81,79 @@ export function Header() {
           >
             <Menu className="h-6 w-6 text-primary" />
           </Button>
-          <div className="md:w-fit md:h-fit w-30 ">
-            <Image src="/patara-logo.svg" alt="logo" width={134} height={36} />
-          </div>
+          <Image src="/patara-logo.svg" alt="logo" width={134} height={36} />
         </div>
-
-        <div className="relative hidden lg:flex lg:flex-1">
-          <div
-            ref={searchRef}
-            className="relative flex w-full max-w-md mx-auto p-2 items-center rounded-xl border border-primary bg-secondary cursor-pointer"
-            onClick={() => setOpen(true)}
-          >
-            <Search className="h-5 w-5 text-secondary mr-2 p-0" />
-            <div className="text-sm text-secondary flex-1">
-              Enter Accounts, Platforms, NFTs, Token
-            </div>
-            <div className="p-2 text-xs text-secondary inline-flex justify-center items-center flex-shrink-0 rounded-lg bg-primary">
-              ⌘K
+        <div className="flex items-center w-full justify-between ml-94">
+          <div className="relative hidden max-w-md w-full lg:flex self-center">
+            <div
+              ref={searchRef}
+              className="relative flex w-full p-2 items-center rounded-xl border border-primary bg-secondary cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
+              <Search className="h-5 w-5 text-secondary mr-2 p-0" />
+              <div className="text-sm text-secondary flex-1">
+                Enter Accounts, Platforms, NFTs, Token
+              </div>
+              <div className="p-2 text-xs text-secondary inline-flex justify-center items-center flex-shrink-0 rounded-lg bg-primary">
+                ⌘K
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {isLoggedIn && (
-            <>
-              <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
-                <NotificationBellIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
-              </IconButton>
-              <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
-                <SettingsIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
-              </IconButton>
-            </>
-          )}
-
-          <div className="flex justify-end">
-            {isLoggedIn ? (
-              <DropdownMenu onOpenChange={setDropdownOpen}>
-                <DropdownMenuTrigger className="bg-background-secondary hover:bg-background-secondary/80 h-10 flex cursor-pointer items-center gap-2 rounded-lg p-1 pr-2 focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0">
-                  <Avatar className="rounded-none focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0">
-                    <AvatarImage src="/user-profile.svg" />
-                  </Avatar>
-
-                  <span className="text-text-primary font-geist hidden text-sm font-semibold xl:block">
-                    @patara.sui
-                  </span>
-
-                  <ChevronDown
-                    className={`text-text-secondary ml-2.5 size-5 transition-transform duration-200 ${
-                      dropdownOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  sideOffset={10}
-                  className="bg-secondary border-primary border shadow-md focus-visible:outline-none focus:outline-none focus:border-transparent focus:ring-0 focus:ring-offset-0"
-                >
-                  <DropdownMenuItem className="text-primary min-w-full cursor-pointer hover:bg-primary hover:text-primary rounded-md px-2 py-1.5 my-0.5">
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="text-primary min-w-full cursor-pointer hover:bg-primary hover:text-primary rounded-md px-2 py-1.5 my-0.5"
-                    onClick={logout}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button
-                variant="primary"
-                onClick={login}
-                className="h-10"
-                disabled={isLoading}
-              >
-                {isLoading ? "Connecting..." : "Connect/Sign in"}
-              </Button>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {isLoggedIn && (
+              <>
+                <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
+                  <NotificationBellIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
+                </IconButton>
+                <IconButton className="bg-background-secondary flex hover:bg-background-secondary/80 size-8 sm:size-10">
+                  <SettingsIcon className="h-5 w-5 text-primary size-4 sm:size-5" />
+                </IconButton>
+              </>
             )}
+
+            <div className="flex justify-end">
+              {isLoggedIn ? (
+                <DropdownMenu onOpenChange={setDropdownOpen}>
+                  <DropdownMenuTrigger className="bg-background-secondary hover:bg-background-secondary/80 h-10 flex cursor-pointer items-center gap-2 rounded-lg p-1 pr-2 focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0">
+                    <Avatar className="rounded-none focus:outline-none focus-visible:outline-none focus:ring-0 focus:ring-offset-0">
+                      <AvatarImage src="/user-profile.svg" />
+                    </Avatar>
+
+                    <span className="text-text-primary font-geist hidden text-sm font-semibold xl:block">
+                      @patara.sui
+                    </span>
+
+                    <ChevronDown
+                      className={`text-text-secondary ml-2.5 size-5 transition-transform duration-200 ${
+                        dropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    sideOffset={10}
+                    className="bg-secondary border-primary border shadow-md focus-visible:outline-none focus:outline-none focus:border-transparent focus:ring-0 focus:ring-offset-0"
+                  >
+                    <DropdownMenuItem className="text-primary min-w-full cursor-pointer hover:bg-primary hover:text-primary rounded-md px-2 py-1.5 my-0.5">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-primary min-w-full cursor-pointer hover:bg-primary hover:text-primary rounded-md px-2 py-1.5 my-0.5"
+                      onClick={logout}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="primary" onClick={login} className="h-10">
+                  Connect/Sign in
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -173,7 +165,7 @@ export function Header() {
               className="border-none hover:border-none text-sm text-primary placeholder:text-secondary focus:ring-0 ring-0 focus:outline-none"
               autoFocus
             />
-            <CommandList className="bg-primary text-primary rounded-b-lg mt-0 pt-0">
+            <CommandList className="bg-secondary rounded-b-lg">
               <CommandEmpty className="text-secondary">
                 No results found.
               </CommandEmpty>

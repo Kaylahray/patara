@@ -21,8 +21,8 @@ export default function Login() {
       </div>
 
       {/* Main Content */}
-      <main className="relative flex justify-center z-10 items-center mt-8">
-        <div className="bg-primary border-default border rounded-3xl  py-10 md:px-5 px-3 w-auto max-w-[464px] md:w-full mx-auto flex flex-col items-center">
+      <main className="relative z-10 mt-8">
+        <div className="bg-primary border-default border rounded-3xl py-10 md:px-5 px-3 w-auto max-w-[464px] md:w-full mx-auto flex flex-col items-center">
           <div className="relative w-80 h-80 mb-8">
             <OrbitAvatars />
           </div>

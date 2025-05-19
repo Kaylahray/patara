@@ -19,9 +19,9 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="lg:px-5 px-3 w-full min-h-screen  h-full">
+    <div className="lg:px-5 px-3 w-full min-h-screen overflow-hidden h-full">
       <Header />
-      <main className="mt-25 overflow-auto">{children}</main>
+      <main>{children}</main>
       <Toaster richColors />
     </div>
   );
